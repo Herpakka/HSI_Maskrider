@@ -12,11 +12,14 @@ from tkinter.constants import *
 import colorsys
 from tkinter import filedialog
 from PIL import Image, ImageTk
+import numpy as np
 
 import beta1
+import HSI_model as model
 
 _debug = True # False to eliminate debug printing from callback functions.
 h,h2,s,v = 0,0,0,0
+file_path = ""
 
 def main(*args):
     '''Main entry point for the application.'''
@@ -114,10 +117,13 @@ def frame2(h, s, v):
 
 class image:
     def import_img():
+        global file_path
         file_path = filedialog.askopenfilename(filetypes=[("Image files", "*.jpg;*.jpeg;*.png;*.gif")])
+        print (file_path)
         if file_path:
             # Open the image file
-            image = Image.open(file_path)
+            path = model.process.get_relative_path(file_path)
+            image = model.process.rgb_to_hsi(path)
             
             # Get the original dimensions of the image
             original_width, original_height = image.size
@@ -146,7 +152,8 @@ class image:
             label = tk.Label(_w1.TFrame1, image=photo)
             label.image = photo  # Keep a reference to the image to prevent it from being garbage collected
             label.pack(fill='both', expand=True)
-    # def mask_image():  
+            
+
 if __name__ == '__main__':
     beta1.start_up()
 
