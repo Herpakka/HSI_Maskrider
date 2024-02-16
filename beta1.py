@@ -77,6 +77,7 @@ class HSI:
         self.Open.place(relx=0.043, rely=0.021, height=25, width=76)
         self.Open.configure(text="""Open""")
         self.Open.configure(compound="left")
+        self.Open.configure(command=beta1_support.image.import_img)
 
         self.filedir = ttk.Label(self.Menu)
         self.filedir.place(relx=0.374, rely=0.015, height=19, width=135)
@@ -139,7 +140,7 @@ class HSI:
         self.HUEedState.configure(variable=self.tch103)
         self.HUEedState.configure(compound="left")
 
-        self.HUEedLen = ttk.Scale(self.HUEed, from_=0, to=180.0)
+        self.HUEedLen = ttk.Scale(self.HUEed, from_=0, to=360.0)
         self.HUEedLen.place(relx=0.158, rely=0.311, relheight=0.533, relwidth=0.526)
         self.HUEedLen.configure(command=beta1_support.ed_lentoval)
 
@@ -157,7 +158,7 @@ class HSI:
         self.HUEst.configure(relief="flat")
         self.HUEst.configure(text="""HUE start""")
 
-        self.HUEstLen = ttk.Scale(self.HUEst, from_=0, to=180.0)
+        self.HUEstLen = ttk.Scale(self.HUEst, from_=0, to=360.0)
         self.HUEstLen.place(relx=0.158, rely=0.333, relheight=0.533, relwidth=0.526)
         self.HUEstLen.configure(command=beta1_support.st_lentoval)
 
