@@ -9,10 +9,14 @@ import sys
 import tkinter as tk
 import tkinter.ttk as ttk
 from tkinter.constants import *
+import colorsys
+from tkinter import filedialog
+from PIL import Image, ImageTk
 
 import beta1
 
 _debug = True # False to eliminate debug printing from callback functions.
+h,h2,s,v = 0,0,0,0
 
 def main(*args):
     '''Main entry point for the application.'''
@@ -25,45 +29,124 @@ def main(*args):
     _w1 = beta1.HSI(_top1)
     root.mainloop()
 def st_lentoval(*args):
+    global h
     if _debug:
         print('beta1_support.h_value1')
         for arg in args:
             print ('	another arg:', arg)
         sys.stdout.flush()
     arg_int = int(float(arg))
-
+    h = arg_int
     _w1.HUEstVal.delete(0, tk.END)  # Clear previous value
     _w1.HUEstVal.insert(0, str(arg_int))  # Insert new value
     _w1.HUEedLen.configure(from_=arg_int)
     _w1.HUEedVal.delete(0, tk.END) # Clear previous value
     _w1.HUEedVal.insert(0, str(arg_int))
+    frame1(h,s,v)
 def ed_lentoval(*args):
+    global h2
     if _debug:
         print('beta1_support.h_value2')
         for arg in args:
             print (' hue end:',arg)
         sys.stdout.flush()
     arg_int = int(float(arg))
+    h2 = arg_int
     _w1.HUEedVal.delete(0, tk.END)
     _w1.HUEedVal.insert(0, str(arg_int))
+    frame2(h2,s,v)
 def sat_lentoval(*args):
+    global s
     if _debug:
         for arg in args:
             print("satuation =",arg)
         sys.stdout.flush()
     arg_int = float(arg)
     args_float = '{:.3f}'.format(arg_int)
+    s = arg
     _w1.satVal.delete(0, tk.END)
     _w1.satVal.insert(0, str(args_float))
+    frame1(h,s,v)
 def inten_lentoval(*args):
+    global v
     if _debug:
         for arg in args:
             print("intensity =",arg)
         sys.stdout.flush()
     arg_int = int(float(arg))
+    v = arg_int
     _w1.intenVal.delete(0, tk.END)
     _w1.intenVal.insert(0, str(arg_int))
+    frame1(h,s,v)
+def frame1(h, s, v):
+    s = float(s)
+    rgb = colorsys.hsv_to_rgb(h / 360, s, v)
+    if _debug:
+        print("H = ", h, "S = ", s, "V = ", v)
+        print("rgb = ", rgb)
+    r = int(rgb[0] * 255)
+    g = int(rgb[1] * 255)
+    b = int(rgb[2] * 255)
+    hex_color = f'#{r:02x}{g:02x}{b:02x}'
+    print("HEX = ", hex_color)
 
+    style_name = 'HUE1pre.TFrame'
+    style = ttk.Style()
+    style.configure(style_name, background=hex_color)
+    _w1.HUE1pre.configure(style=style_name)
+
+def frame2(h, s, v):
+    s = float(s)
+    rgb = colorsys.hsv_to_rgb(h / 360, s, v)
+    if _debug:
+        print("H2 = ", h, "S = ", s, "V = ", v)
+        print("rgb = ", rgb)
+    r = int(rgb[0] * 255)
+    g = int(rgb[1] * 255)
+    b = int(rgb[2] * 255)
+    hex_color = f'#{r:02x}{g:02x}{b:02x}'
+    print("HEX = ", hex_color)
+
+    style_name = 'HUE2pre.TFrame'
+    style = ttk.Style()
+    style.configure(style_name, background=hex_color)
+    _w1.HUE2pre.configure(style=style_name)
+
+class image:
+    def import_img():
+        file_path = filedialog.askopenfilename(filetypes=[("Image files", "*.jpg;*.jpeg;*.png;*.gif")])
+        if file_path:
+            # Open the image file
+            image = Image.open(file_path)
+            
+            # Get the original dimensions of the image
+            original_width, original_height = image.size
+            
+            # Get the dimensions of TFrame1
+            target_width, target_height = _w1.TFrame1.winfo_width(), _w1.TFrame1.winfo_height()
+            
+            # Calculate the resizing factor for width and height
+            width_ratio = target_width / original_width
+            height_ratio = target_height / original_height
+            
+            # Use the smaller of the two ratios to maintain aspect ratio
+            resize_ratio = min(width_ratio, height_ratio)
+            
+            # Calculate the new dimensions
+            new_width = int(original_width * resize_ratio)
+            new_height = int(original_height * resize_ratio)
+            
+            # Resize the image
+            image = image.resize((new_width, new_height))
+            
+            # Convert the image to a PhotoImage object
+            photo = ImageTk.PhotoImage(image)
+            
+            # Display the image in a label
+            label = tk.Label(_w1.TFrame1, image=photo)
+            label.image = photo  # Keep a reference to the image to prevent it from being garbage collected
+            label.pack(fill='both', expand=True)
+    # def mask_image():  
 if __name__ == '__main__':
     beta1.start_up()
 
