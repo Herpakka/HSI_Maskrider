@@ -159,6 +159,9 @@ class HSI:
         self.HUE_entry1.place(relx=0.714, rely=0.15, relheight=0.115, relwidth=0.219)
         self.HUE_entry1.configure(takefocus="")
         self.HUE_entry1.configure(cursor="ibeam")
+        self.HUE_entry1.configure(validate="key")
+        self.HUE_entry1.configure(validatecommand=beta1_support.st_vartolen)
+
 #================================================================================================================================
         # intensity1
         self.Intense_label1 = ttk.Label(self.TNotebook1_t1)
@@ -292,6 +295,20 @@ class HSI:
         self.TFrame1.configure(relief="groove")
         self.TFrame1.configure(borderwidth="2")
         self.TFrame1.configure(relief="groove")
+
+        self.TFrame2 = ttk.Frame(self.Menu)
+        self.TFrame2.place(relx=0.34, rely=0.577, relheight=0.075
+                , relwidth=0.149)
+        self.TFrame2.configure(relief='groove')
+        self.TFrame2.configure(borderwidth="2")
+        self.TFrame2.configure(relief="groove")
+
+        self.TFrame3 = ttk.Frame(self.Menu)
+        self.TFrame3.place(relx=0.809, rely=0.577, relheight=0.075
+                , relwidth=0.149)
+        self.TFrame3.configure(relief='groove')
+        self.TFrame3.configure(borderwidth="2")
+        self.TFrame3.configure(relief="groove")
 
 
 def start_up():
