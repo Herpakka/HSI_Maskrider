@@ -18,7 +18,7 @@ import beta1
 import HSI_model as model
 
 _debug = True # False to eliminate debug printing from callback functions.
-h,h2,s,v = 0,0,0,0
+h,h2,s,v,s2,v2 = 0,0,0,0,0,0
 file_path = ""
 
 def main(*args):
@@ -40,11 +40,11 @@ def st_lentoval(*args):
         sys.stdout.flush()
     arg_int = int(float(arg))
     h = arg_int
-    _w1.HUEstVal.delete(0, tk.END)  # Clear previous value
-    _w1.HUEstVal.insert(0, str(arg_int))  # Insert new value
-    _w1.HUEedLen.configure(from_=arg_int)
-    _w1.HUEedVal.delete(0, tk.END) # Clear previous value
-    _w1.HUEedVal.insert(0, str(arg_int))
+    _w1.HUE_entry1.delete(0, tk.END)  # Clear previous value
+    _w1.HUE_entry1.insert(0, str(arg_int))  # Insert new value
+    _w1.HUE_scale2.configure(from_=arg_int)
+    _w1.HUE_entry2.delete(0, tk.END) # Clear previous value
+    _w1.HUE_entry2.insert(0, str(arg_int))
     frame1(h,s,v)
 def ed_lentoval(*args):
     global h2
@@ -55,9 +55,9 @@ def ed_lentoval(*args):
         sys.stdout.flush()
     arg_int = int(float(arg))
     h2 = arg_int
-    _w1.HUEedVal.delete(0, tk.END)
-    _w1.HUEedVal.insert(0, str(arg_int))
-    frame2(h2,s,v)
+    _w1.HUE_entry2.delete(0, tk.END)
+    _w1.HUE_entry2.insert(0, str(arg_int))
+    frame2(h2,s2,v2)
 def sat_lentoval(*args):
     global s
     if _debug:
@@ -67,9 +67,21 @@ def sat_lentoval(*args):
     arg_int = float(arg)
     args_float = '{:.3f}'.format(arg_int)
     s = arg
-    _w1.satVal.delete(0, tk.END)
-    _w1.satVal.insert(0, str(args_float))
+    _w1.Satuation_entry1.delete(0, tk.END)
+    _w1.Satuation_entry1.insert(0, str(args_float))
     frame1(h,s,v)
+def sat2_lentoval(*args):
+    global s2
+    if _debug:
+        for arg in args:
+            print("satuation =",arg)
+        sys.stdout.flush()
+    arg_int = float(arg)
+    args_float = '{:.3f}'.format(arg_int)
+    s2 = arg
+    _w1.Satuation_entry2.delete(0, tk.END)
+    _w1.Satuation_entry2.insert(0, str(args_float))
+    frame2(h2,s2,v2)
 def inten_lentoval(*args):
     global v
     if _debug:
@@ -78,18 +90,31 @@ def inten_lentoval(*args):
         sys.stdout.flush()
     arg_int = int(float(arg))
     v = arg_int
-    _w1.intenVal.delete(0, tk.END)
-    _w1.intenVal.insert(0, str(arg_int))
+    _w1.Intensity_Entry1.delete(0, tk.END)
+    _w1.Intensity_Entry1.insert(0, str(arg_int))
     frame1(h,s,v)
+def inten2_lentoval(*args):
+    global v2
+    if _debug:
+        for arg in args:
+            print("intensity =",arg)
+        sys.stdout.flush()
+    arg_int = int(float(arg))
+    v2 = arg_int
+    _w1.Intensity_Entry2.delete(0, tk.END)
+    _w1.Intensity_Entry2.insert(0, str(arg_int))
+    frame2(h2,s2,v2)
+
 def frame1(h, s, v):
     s = float(s)
     rgb = colorsys.hsv_to_rgb(h / 360, s, v)
     if _debug:
         print("H = ", h, "S = ", s, "V = ", v)
-        print("rgb = ", rgb)
-    r = int(rgb[0] * 255)
-    g = int(rgb[1] * 255)
-    b = int(rgb[2] * 255)
+        
+    r = int(rgb[0])
+    g = int(rgb[1])
+    b = int(rgb[2])
+    print("rgb = ", r,g,b)
     hex_color = f'#{r:02x}{g:02x}{b:02x}'
     print("HEX = ", hex_color)
 
@@ -104,9 +129,9 @@ def frame2(h, s, v):
     if _debug:
         print("H2 = ", h, "S = ", s, "V = ", v)
         print("rgb = ", rgb)
-    r = int(rgb[0] * 255)
-    g = int(rgb[1] * 255)
-    b = int(rgb[2] * 255)
+    r = int(rgb[0])
+    g = int(rgb[1])
+    b = int(rgb[2])
     hex_color = f'#{r:02x}{g:02x}{b:02x}'
     print("HEX = ", hex_color)
 
@@ -126,7 +151,9 @@ class image:
             image = model.process.rgb_to_hsi(path)
             
             # Get the original dimensions of the image
-            original_width, original_height = image.size
+            original_height ,original_width = model.process.get_shape()
+            print (original_width, original_height)
+            # original_width, original_height = image.size
             
             # Get the dimensions of TFrame1
             target_width, target_height = _w1.TFrame1.winfo_width(), _w1.TFrame1.winfo_height()
@@ -143,10 +170,16 @@ class image:
             new_height = int(original_height * resize_ratio)
             
             # Resize the image
-            image = image.resize((new_width, new_height))
+            # image = image.resize((new_width, new_height))
+            pil_image = Image.fromarray(image)
+            image = pil_image.resize((new_width, new_height))
             
             # Convert the image to a PhotoImage object
             photo = ImageTk.PhotoImage(image)
+
+            # Clear previous image if exists
+            for widget in _w1.TFrame1.winfo_children():
+                widget.destroy()
             
             # Display the image in a label
             label = tk.Label(_w1.TFrame1, image=photo)
@@ -156,7 +189,6 @@ class image:
 
 if __name__ == '__main__':
     beta1.start_up()
-
 
 
 
