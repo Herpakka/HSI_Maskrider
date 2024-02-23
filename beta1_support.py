@@ -79,8 +79,8 @@ def st_lentoval(*args):
     _w1.HUE_scale2.configure(from_=arg_int)
     _w1.HUE_entry2.delete(0, tk.END)  # Clear previous value
     _w1.HUE_entry2.insert(0, str(arg_int))
-    frame1(h, s, v)
-    frame3(h)
+    # frame1(h, s, v)
+    #frame3(h)
     image.realtime_mask()
 
 
@@ -95,7 +95,7 @@ def ed_lentoval(*args):
     h2 = arg_int
     _w1.HUE_entry2.delete(0, tk.END)
     _w1.HUE_entry2.insert(0, str(arg_int))
-    frame2(h2, s2, v2)
+    # frame2(h2, s2, v2)
     frame4(h2)
     image.realtime_mask()
 
@@ -111,7 +111,7 @@ def sat_lentoval(*args):
     s = arg
     _w1.Satuation_entry1.delete(0, tk.END)
     _w1.Satuation_entry1.insert(0, str(args_float))
-    frame1(h, s, v)
+    # frame1(h, s, v)
     image.realtime_mask()
 
 
@@ -126,7 +126,7 @@ def sat2_lentoval(*args):
     s2 = arg
     _w1.Satuation_entry2.delete(0, tk.END)
     _w1.Satuation_entry2.insert(0, str(args_float))
-    frame2(h2, s2, v2)
+    # frame2(h2, s2, v2)
     image.realtime_mask()
 
 
@@ -140,7 +140,7 @@ def inten_lentoval(*args):
     v = arg_int
     _w1.Intensity_Entry1.delete(0, tk.END)
     _w1.Intensity_Entry1.insert(0, str(arg_int))
-    frame1(h, s, v)
+    # frame1(h, s, v)
     image.realtime_mask()
 
 
@@ -154,7 +154,7 @@ def inten2_lentoval(*args):
     v2 = arg_int
     _w1.Intensity_Entry2.delete(0, tk.END)
     _w1.Intensity_Entry2.insert(0, str(arg_int))
-    frame2(h2, s2, v2)
+    # frame2(h2, s2, v2)
     image.realtime_mask()
 
 
@@ -189,10 +189,6 @@ def frame2(h, s, v):
     hex_color = f"#{r:02x}{g:02x}{b:02x}"
     print("HEX = ", hex_color)
 
-    style_name = "HUE2pre.TFrame"
-    style = ttk.Style()
-    style.configure(style_name, background=hex_color)
-    _w1.HUE2pre.configure(style=style_name)
 
 
 def frame3(h):
@@ -203,10 +199,6 @@ def frame3(h):
     hex_color = f"#{r:02x}{g:02x}{b:02x}"
     print("HEX3 = ", hex_color)
 
-    style_name = "TFrame2.TFrame"
-    style = ttk.Style()
-    style.configure(style_name, background=hex_color)
-    _w1.TFrame2.configure(style=style_name)
 
 
 def frame4(h2):
@@ -217,10 +209,6 @@ def frame4(h2):
     hex_color = f"#{r:02x}{g:02x}{b:02x}"
     print("HEX4 = ", hex_color)
 
-    style_name = "TFrame3.TFrame"
-    style = ttk.Style()
-    style.configure(style_name, background=hex_color)
-    _w1.TFrame3.configure(style=style_name)
 
 
 class image:
